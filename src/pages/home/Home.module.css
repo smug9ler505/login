@@ -1,0 +1,13 @@
+.homeContainer {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+    align-items: center;
+}
+
+.logout {
+    width: 200px;
+    font-size: larger;
+}

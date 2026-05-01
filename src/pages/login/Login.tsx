@@ -21,11 +21,9 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [captchaValue, setCaptchaValue] = useState("");
   
-  
-  
   const [serverError, setServerError] = useState(false);
-  
   const [expired, setExpired] = useState(false);
+  const [loginError, setLoginError] = useState('')
 
   const { login, authToken } = useAuth();
   const navigate = useNavigate()
@@ -66,7 +64,7 @@ export const Login = () => {
       return;
     }
 
-    if (expires && Number(new Date()) >= Number(new Date(expires * 1000))) {
+    if (expires && Date.now() >= Number(new Date(expires * 1000))) {
       setExpired(true);
 
       return;
@@ -80,11 +78,11 @@ export const Login = () => {
         csrfToken: anticsrfData.token,
       });
       if (!resp.ok) {
-        throw new Error();
+        throw new Error(resp.error);
       }
       login(resp.token);
-    } catch (e) {
-      setServerError(true);
+    } catch (e: any) {
+      setLoginError(e.message);
     }
   };
   return (
@@ -131,6 +129,11 @@ export const Login = () => {
       {serverError && (
         <p className={styles.expired}>
           Server Error! Please, refresh the page and try again
+        </p>
+      )}
+      {loginError && (
+        <p className={styles.expired}>
+          {loginError}
         </p>
       )}
       <button

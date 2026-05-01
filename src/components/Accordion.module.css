@@ -1,0 +1,26 @@
+.item {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    cursor: pointer;
+}
+
+.item:hover {
+    transform: scale(1.02);
+}
+
+.accordion {
+    width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid gray;
+    padding:10px;
+    border-radius: 5px;
+
+}
+.hasChildren {
+    font-weight: bold;
+}

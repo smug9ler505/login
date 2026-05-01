@@ -12,11 +12,6 @@ export const loginRequest = async ({
   captchaValue,
   csrfToken,
 }: Args) => {
-  console.log(username,
-  password,
-  captchaToken,
-  captchaValue,
-  csrfToken,)
   const resp = await fetch(`${import.meta.env.VITE_API_BASE}/login`, {
     method: 'POST',
     body: JSON.stringify({
