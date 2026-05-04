@@ -7,9 +7,9 @@ interface IProps {
 }
 
 export const ProtectedRoute: React.FC<IProps> = ({children}) => {
-    const {authToken} = useAuth();
+    const {checkAuth} = useAuth();
 
-    if (!authToken) {
+    if (!checkAuth()) {
         return <Navigate to={'login'} replace />
     }
 

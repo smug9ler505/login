@@ -25,14 +25,14 @@ export const Login = () => {
   const [expired, setExpired] = useState(false);
   const [loginError, setLoginError] = useState('')
 
-  const { login, authToken } = useAuth();
+  const { login, checkAuth } = useAuth();
   const navigate = useNavigate()
 
   useEffect(() => {
-  if (authToken) {
+  if (checkAuth()) {
     navigate('/', {replace: true})
   }
-}, [authToken]);
+}, []);
 
   useEffect(() => {
     const getTokens = async () => {
@@ -80,11 +80,12 @@ export const Login = () => {
       if (!resp.ok) {
         throw new Error(resp.error);
       }
-      login(resp.token);
+      login(resp.token, resp.expires);
     } catch (e: any) {
       setLoginError(e.message);
     }
   };
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <h2>Login</h2>
