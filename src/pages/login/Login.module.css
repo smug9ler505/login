@@ -7,49 +7,48 @@
   border: 1px solid white;
   border-radius: 5px;
   padding: 10px 15px;
-
 }
 
 .labelLogin {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .labelCaptcha {
-    margin: 10px 0;
-    display: flex;
-    gap: 3px;
-    flex-direction: column;
-    border: 1px dotted grey;
-    padding: 5px;
-    align-items: center;
+  margin: 10px 0;
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+  border: 1px dotted grey;
+  padding: 5px;
+  align-items: center;
 }
 
 .captcha {
-font-style: italic;
-background-color: gray;
-color: white;
-padding: 5px;
+  font-style: italic;
+  background-color: gray;
+  color: white;
+  padding: 5px;
 }
 
 .inputCaptcha {
-    width: 130px;
-    height: 30px;
+  width: 130px;
+  height: 30px;
 }
 
 .button {
-    padding:  5px 15px;
-    font-size: medium;
-    cursor: pointer;
+  padding: 5px 15px;
+  font-size: medium;
+  cursor: pointer;
 }
 
 .input {
-    padding: 3px 5px;
+  padding: 3px 5px;
 }
 
 .expired {
-    font-size: smaller;
-    color: rgb(193, 24, 24);
+  font-size: smaller;
+  color: rgb(193, 24, 24);
 }

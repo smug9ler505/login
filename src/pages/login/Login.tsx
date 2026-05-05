@@ -20,15 +20,12 @@ export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [captchaValue, setCaptchaValue] = useState("");
-  
+
   const [serverError, setServerError] = useState(false);
   const [expired, setExpired] = useState(false);
-  const [loginError, setLoginError] = useState('')
+  const [loginError, setLoginError] = useState("");
 
   const { login, checkAuth } = useAuth();
-  
-  
-
 
   useEffect(() => {
     const getTokens = async () => {
@@ -45,7 +42,7 @@ export const Login = () => {
         setCaptchaData(responses[0]);
         setAnticsrfData(responses[1]);
         setExpires(Math.min(+responses[0].expires, +responses[1].expires));
-        setServerError(false)
+        setServerError(false);
       } catch (e) {
         console.error(e);
         setServerError(true);
@@ -61,7 +58,7 @@ export const Login = () => {
       return;
     }
 
-    if (expires && Date.now()/1000 >= expires) {
+    if (expires && Date.now() / 1000 >= expires) {
       setExpired(true);
 
       return;
@@ -82,10 +79,9 @@ export const Login = () => {
     } catch (e: any) {
       setLoginError(e.message);
     }
-    
   };
   if (checkAuth()) {
-    return <Navigate to={'/'} replace />
+    return <Navigate to={"/"} replace />;
   }
 
   return (
@@ -130,15 +126,9 @@ export const Login = () => {
         </p>
       )}
       {serverError && (
-        <p className={styles.expired}>
-          Server Error! Please, please wait.
-        </p>
+        <p className={styles.expired}>Server Error! Please, please wait.</p>
       )}
-      {loginError && (
-        <p className={styles.expired}>
-          {loginError}
-        </p>
-      )}
+      {loginError && <p className={styles.expired}>{loginError}</p>}
       <button
         type="submit"
         className={styles.button}

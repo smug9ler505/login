@@ -4,20 +4,25 @@ import styles from "./Accordion.module.css";
 
 interface ItemProps {
   item: DataItem;
+  marginLeft?: number;
 }
 
-export const AccordionItem: React.FC<ItemProps> = ({ item }) => {
+export const AccordionItem: React.FC<ItemProps> = ({
+  item,
+  marginLeft = 0,
+}) => {
   const [open, setOpen] = useState(false);
 
   const hasChildren = item.children_count;
 
   return (
-    <div className={styles.item}>
+    <div>
       <div
         onClick={() => setOpen(!open)}
-        className={hasChildren ? 'hasChildren' : ''}
+        className={`${styles.item} ${hasChildren ? "hasChildren" : ""}`}
         style={{
           fontWeight: hasChildren ? "bold" : "normal",
+          marginLeft: `${marginLeft}px`,
         }}
       >
         {hasChildren ? (open ? "▼ " : "▶ ") : null}
@@ -27,7 +32,11 @@ export const AccordionItem: React.FC<ItemProps> = ({ item }) => {
       {open && hasChildren ? (
         <>
           {item.children.map((child) => (
-            <AccordionItem key={child.id} item={child} />
+            <AccordionItem
+              key={child.id}
+              item={child}
+              marginLeft={marginLeft + 16}
+            />
           ))}
         </>
       ) : null}
