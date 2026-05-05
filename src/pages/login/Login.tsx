@@ -2,7 +2,7 @@ import { useEffect, useState, type SubmitEventHandler } from "react";
 import styles from "./Login.module.css";
 import { loginRequest } from "../../utils/loginRequest";
 import { useAuth } from "../../hooks/UseAuth";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 interface CaptchaData {
   code: string;
@@ -26,13 +26,9 @@ export const Login = () => {
   const [loginError, setLoginError] = useState('')
 
   const { login, checkAuth } = useAuth();
-  const navigate = useNavigate()
+  
+  
 
-  useEffect(() => {
-  if (checkAuth()) {
-    navigate('/', {replace: true})
-  }
-}, []);
 
   useEffect(() => {
     const getTokens = async () => {
@@ -50,7 +46,7 @@ export const Login = () => {
         setAnticsrfData(responses[1]);
         setExpires(Math.min(+responses[0].expires, +responses[1].expires));
       } catch (e) {
-        console.log(e);
+        console.error(e);
         setServerError(true);
       }
     };
@@ -64,7 +60,7 @@ export const Login = () => {
       return;
     }
 
-    if (expires && Date.now() >= Number(new Date(expires * 1000))) {
+    if (expires && Date.now()/1000 >= expires) {
       setExpired(true);
 
       return;
@@ -80,11 +76,16 @@ export const Login = () => {
       if (!resp.ok) {
         throw new Error(resp.error);
       }
-      login(resp.token, resp.expires);
+
+      login(resp.token, (Date.now() + 1000 * resp.expires_in).toString());
     } catch (e: any) {
       setLoginError(e.message);
     }
+    
   };
+  if (checkAuth()) {
+    return <Navigate to={'/'} replace />
+  }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

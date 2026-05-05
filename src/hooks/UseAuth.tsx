@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 interface ContextValues {
     authToken: string | null;
@@ -16,7 +17,6 @@ const AuthContext = createContext({} as ContextValues);
 export const AuthProvider: React.FC<IProps> = ({children}) => {
     const [authToken, setAuthToken] = useState(() => localStorage.getItem('auth_token'));
     const [tokenExpire, setTokenExpire] = useState(() => localStorage.getItem('token_expire'));
-
 
     const logout = () => {
         setAuthToken(null);

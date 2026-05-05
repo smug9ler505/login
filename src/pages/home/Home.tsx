@@ -12,7 +12,6 @@ export interface DataItem {
 
 export const Home = () => {
   const [categories, setCategories] = useState<DataItem[] | null>(null);
-  console.log(categories);
   const { logout } = useAuth();
 
   useEffect(() => {
