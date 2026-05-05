@@ -1,9 +1,16 @@
+import { apiRequest } from "./apiRequest";
+
 interface Args {
   username: string;
   password: string;
   captchaToken: string;
   captchaValue: string;
   csrfToken: string;
+}
+interface LoginResponse {
+  expires_in: number;
+  ok: 1 | 0;
+  token: string;
 }
 export const loginRequest = async ({
   username,
@@ -12,8 +19,8 @@ export const loginRequest = async ({
   captchaValue,
   csrfToken,
 }: Args) => {
-  const resp = await fetch(`${import.meta.env.VITE_API_BASE}/login`, {
-    method: 'POST',
+  const resp = await apiRequest<LoginResponse>(`/login`, {
+    method: "POST",
     body: JSON.stringify({
       username,
       password,
@@ -21,7 +28,7 @@ export const loginRequest = async ({
       captcha_token: captchaToken,
       anticsrf: csrfToken,
     }),
-  }).then(val => val.json());
+  });
 
   return resp;
 };

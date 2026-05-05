@@ -3,13 +3,16 @@ import styles from "./Login.module.css";
 import { loginRequest } from "../../utils/loginRequest";
 import { useAuth } from "../../hooks/UseAuth";
 import { Navigate } from "react-router-dom";
+import { apiRequest } from "../../utils/apiRequest";
 
 interface CaptchaData {
   code: string;
   token: string;
+  expires: number;
 }
 interface AnticsrfData {
   token: string;
+  expires: number;
 }
 
 export const Login = () => {
@@ -27,29 +30,35 @@ export const Login = () => {
 
   const { login, checkAuth } = useAuth();
 
+ 
+
   useEffect(() => {
     const getTokens = async () => {
       try {
-        const responses = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE}/captcha`).then((val) =>
-            val.json(),
-          ),
-          fetch(`${import.meta.env.VITE_API_BASE}/anticsrf`).then((val) =>
-            val.json(),
-          ),
+        const [captcha, csrf] = await Promise.all([
+          apiRequest<CaptchaData>(`/captcha`),
+          apiRequest<AnticsrfData>(`/anticsrf`),
         ]);
 
-        setCaptchaData(responses[0]);
-        setAnticsrfData(responses[1]);
-        setExpires(Math.min(+responses[0].expires, +responses[1].expires));
+
+        setCaptchaData(captcha);
+        setAnticsrfData(csrf);
+        setExpires(Math.min(csrf.expires, captcha.expires));
+
         setServerError(false);
-      } catch (e) {
-        console.error(e);
-        setServerError(true);
+        setExpired(false);
+      } catch (err) {
+        console.error(err);
+
+        setCaptchaData(null);
+        setAnticsrfData(null);
+        setExpires(null);
+        setServerError(true)
       }
     };
+
     getTokens();
-  }, [loginError, serverError]);
+  }, [loginError]);
 
   const handleSubmit: SubmitEventHandler = async (e) => {
     e.preventDefault();
@@ -71,9 +80,6 @@ export const Login = () => {
         captchaToken: captchaData.token,
         csrfToken: anticsrfData.token,
       });
-      if (!resp.ok) {
-        throw new Error(resp.error);
-      }
 
       login(resp.token, (Date.now() + 1000 * resp.expires_in).toString());
     } catch (e: any) {
@@ -126,7 +132,7 @@ export const Login = () => {
         </p>
       )}
       {serverError && (
-        <p className={styles.expired}>Server Error! Please, please wait.</p>
+        <p className={styles.expired}>Server Error! Please, wait.</p>
       )}
       {loginError && <p className={styles.expired}>{loginError}</p>}
       <button
