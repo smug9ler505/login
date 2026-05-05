@@ -45,13 +45,14 @@ export const Login = () => {
         setCaptchaData(responses[0]);
         setAnticsrfData(responses[1]);
         setExpires(Math.min(+responses[0].expires, +responses[1].expires));
+        setServerError(false)
       } catch (e) {
         console.error(e);
         setServerError(true);
       }
     };
     getTokens();
-  }, []);
+  }, [loginError, serverError]);
 
   const handleSubmit: SubmitEventHandler = async (e) => {
     e.preventDefault();
@@ -130,7 +131,7 @@ export const Login = () => {
       )}
       {serverError && (
         <p className={styles.expired}>
-          Server Error! Please, refresh the page and try again
+          Server Error! Please, please wait.
         </p>
       )}
       {loginError && (
